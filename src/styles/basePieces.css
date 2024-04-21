@@ -1,0 +1,114 @@
+.pawn-white {
+  background-image: url(../assets/pieces/pawn-white.svg);
+}
+
+.knigts-white {
+  background-image: url(../assets/pieces/knight-white.svg);
+}
+
+.bishop-white {
+  background-image: url(../assets/pieces/bishop-white.svg);
+}
+
+.rook-white {
+  background-image: url(../assets/pieces/rook-white.svg);
+}
+
+.queen-white {
+  background-image: url(../assets/pieces/queen-white.svg);
+}
+
+.king-white {
+  background-image: url(../assets/pieces/king-white.svg);
+}
+
+.pawn-black {
+  background-image: url(../assets/pieces/pawn-black.svg);
+}
+
+.knigts-black {
+  background-image: url(../assets/pieces/knight-black.svg);
+}
+
+.bishop-black {
+  background-image: url(../assets/pieces/bishop-black.svg);
+}
+
+.rook-black {
+  background-image: url(../assets/pieces/rook-black.svg);
+}
+
+.queen-black {
+  background-image: url(../assets/pieces/queen-black.svg);
+}
+
+.king-black {
+  background-image: url(../assets/pieces/king-black.svg);
+}
+
+/* DEPRECTED */
+.cursor-pawn-white {
+  cursor: url(../assets/pieces/pawn-white.svg), auto;
+}
+
+.cursor-knigts-white {
+  cursor: url(../assets/pieces/knight-white.svg), auto;
+}
+
+.cursor-bishop-white {
+  cursor: url(../assets/pieces/bishop-white.svg), auto;
+}
+
+.cursor-rook-white {
+  cursor: url(../assets/pieces/rook-white.svg), auto;
+}
+
+.cursor-queen-white {
+  cursor: url(../assets/pieces/queen-white.svg), auto;
+}
+
+.cursor-king-white {
+  cursor: url(../assets/pieces/king-white.svg), auto;
+}
+
+.cursor-pawn-black {
+  cursor: url(../assets/pieces/pawn-black.svg), auto;
+}
+
+.cursor-knigts-black {
+  cursor: url(../assets/pieces/knight-black.svg), auto;
+}
+
+.cursor-bishop-black {
+  cursor: url(../assets/pieces/bishop-black.svg), auto;
+}
+
+.cursor-rook-black {
+  cursor: url(../assets/pieces/rook-black.svg), auto;
+}
+
+.cursor-queen-black {
+  cursor: url(../assets/pieces/queen-black.svg), auto;
+}
+
+.cursor-king-black {
+  cursor: url(../assets/pieces/king-black.svg), auto;
+}
+
+@media screen and (min-width: 1650px) {
+  .pawn-white,
+  .knigts-white,
+  .bishop-white,
+  .rook-white,
+  .queen-white,
+  .king-white,
+  .pawn-black,
+  .knigts-black,
+  .bishop-black,
+  .rook-black,
+  .queen-black,
+  .king-black {
+    /* Взято по значениям из дизайна */
+    background-size: 71.5px;
+  }
+}

@@ -1,0 +1,84 @@
+.chessBoard {
+    position: relative;
+    border: 1px solid #e0e0e0;
+}
+
+.figuresLayout {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.controlLayout {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.controlLayoutGrabbing {
+    cursor: grabbing;
+}
+
+.interactiveLayout {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.selectedCell {
+    background-color: var(--color-cyan-200) !important;
+    border: 3px solid var(--color-cyan-500);
+    box-sizing: border-box;
+}
+
+.controlCell {
+    width: 92px;
+    height: 92px;
+}
+
+.interactiveCell {
+    width: 92px;
+    height: 92px;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    width: 92px;
+    height: 92px;
+    background-color: var(--color-grey-200);
+}
+
+.cellLight {
+    background-color: var(--color-grey-10);
+}
+
+.figure {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all .3s;
+}
+
+.holdedFigure {
+    transition: none;
+}
+
+.bluredFigure {
+    opacity: .4;
+}

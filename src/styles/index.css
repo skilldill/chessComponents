@@ -1,0 +1,21 @@
+@import '../assets/fonts/Inter/inter.css';
+@import './basePieces.css';
+@import './colors.css';
+
+:global {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-grey-10);
+  }
+}
