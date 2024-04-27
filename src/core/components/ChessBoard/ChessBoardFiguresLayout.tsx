@@ -44,15 +44,7 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
             {actualState.map((figure, i) => 
                 <div 
                     key={i}
-                    className={cn(
-                        [styles.figure, getFigureCSS(figure)],
-                        { 
-                            [styles.bluredFigure]: 
-                                !!blurPosition
-                                && figure.position![0] === blurPosition[0]
-                                && figure.position![1] === blurPosition[1]
-                        }
-                    )}
+                    className={cn([styles.figure, getFigureCSS(figure)])}
                     style={{ 
                         top: `${DEFAULT_CELL_SIZE * figure.position![1]}px`, 
                         left: `${DEFAULT_CELL_SIZE * figure.position![0]}px`

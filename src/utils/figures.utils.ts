@@ -44,3 +44,14 @@ export const mapCellsToFiguresArray = (boardState: Cell[][]) => {
 
     return figuresWithPosition;
 }
+
+/**
+ * 
+ * @param possibleMoves Список возможных ходов
+ * @param position позиция для проверки
+ */
+export const checkIsPossibleMove = (possibleMoves: number[][], position: number[]) => {
+    return !!possibleMoves.find((possibleMove) => 
+        possibleMove[0] === position[0] && possibleMove[1] === position[1]
+    );
+}

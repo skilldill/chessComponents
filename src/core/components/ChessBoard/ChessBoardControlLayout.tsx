@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 import styles from './ChessBoard.module.css';
 import { getFilledArrayBySize } from "../../../utils/figures.utils";
 import cn from 'classnames';
@@ -23,14 +23,7 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
         onGrabbing,
     } = props;
 
-    const [chessBoardControlLayoutHtml, setChessBoardControlLayoutHtml] = useState<HTMLElement | null>();
     const [pressed, setPressed] = useState(false);
-
-    // Инициализация доски
-    useEffect(() => {
-        const chessBoardRef = document.getElementById('chessBoardControlLayout');
-        setChessBoardControlLayoutHtml(chessBoardRef);
-    }, []);
 
     const handleClick = (cellPos: number[]) => {
         onSelect(cellPos);
@@ -48,13 +41,8 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
 
     const handleGrabing = (event: MouseEvent) => {
         if (pressed) {
-            const { pageX, pageY } = event;
-            const { offsetLeft, offsetTop } = chessBoardControlLayoutHtml!;
-    
-            const posX = pageX - offsetLeft;
-            const posY = pageY - offsetTop;
-
-            onGrabbing(posX, posY);
+            const { pageX, pageY} = event;
+            onGrabbing(pageX, pageY);
         }
     }
 

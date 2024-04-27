@@ -14,13 +14,14 @@ type ChessBoardProps = {
 }
 
 export const ChessBoard: FC<ChessBoardProps> = (props) => {
-    const { FEN, onChange } = props;
+    const { FEN } = props;
 
     const {
         actualState,
         fromPos,
         holdedFigure,
         grabbingPos,
+        possibleMoves,
 
         setActualState,
         selectFrom,
@@ -35,7 +36,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
     }, [FEN])
 
     return (
-        <div 
+        <div
             className={styles.chessBoard}
             id="chessBoardControlLayout"
         >
@@ -46,6 +47,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
             />
             <ChessBoardInteractiveLayout 
                 selectedPos={fromPos}
+                possibleMoves={possibleMoves}
                 holdedFigure={holdedFigure}
                 grabbingPos={grabbingPos}
             />
