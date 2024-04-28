@@ -1,4 +1,4 @@
-import { FENtoGameState, FigureColor } from "../../../core/JSChessEngine";
+import { FENtoGameState, FigureColor, MoveData } from "../../../core/JSChessEngine";
 import { FC, useEffect } from "react";
 import styles from './ChessBoard.module.css';
 import { ChessBoardCellsLayout } from "./ChessBoardCellsLayout";
@@ -11,10 +11,11 @@ type ChessBoardProps = {
     FEN: string;
     onChange: (FEN: string) => void;
     color: FigureColor;
+    change?: MoveData[]
 }
 
 export const ChessBoard: FC<ChessBoardProps> = (props) => {
-    const { FEN } = props;
+    const { FEN, change } = props;
 
     const {
         actualState,
@@ -32,18 +33,14 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
     useEffect(() => {
         const positions = FENtoGameState(FEN);
         setActualState(positions.boardState);
-        console.log(positions);
     }, [FEN])
 
     return (
-        <div
-            className={styles.chessBoard}
-            id="chessBoardControlLayout"
-        >
+        <div className={styles.chessBoard}>
             <ChessBoardCellsLayout />
             <ChessBoardFiguresLayout 
                 initialState={actualState}
-                blurPosition={holdedFigure && fromPos}
+                change={change}
             />
             <ChessBoardInteractiveLayout 
                 selectedPos={fromPos}

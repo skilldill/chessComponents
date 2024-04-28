@@ -7,12 +7,12 @@ import { DEFAULT_CELL_SIZE } from "./constants";
 
 type ChessBoardFiguresLayoutProps = {
     initialState: Cell[][];
-    change?: MoveData[];
+    change?: MoveData[]; // chage is array for correct rndering transitions for castling
     blurPosition?: number[];
 }
 
 export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props) => {
-    const { initialState, change, blurPosition } = props;
+    const { initialState, change } = props;
     const [actualState, setActualState] = useState<Figure[]>([]);
 
     useEffect(() => {
@@ -21,6 +21,7 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
 
     useEffect(() => {
         if (!!change) {
+            console.log(change);
             setActualState((prevState) => {
                 const updatedState = [...prevState];
 

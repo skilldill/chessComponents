@@ -18,6 +18,7 @@ export const useChessBoardInteractive = () => {
         if (!cell.figure) {
             clearFromPos();
             clearPossibleMoves();
+            setHoldedFigure(undefined);
             return;
         }
 
