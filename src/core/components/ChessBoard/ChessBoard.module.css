@@ -84,7 +84,7 @@
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
-    transition: all .3s;
+    transition: all .15s ease-out;
 }
 
 .holdedFigure {

@@ -18,20 +18,25 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
     const { FEN, change } = props;
 
     const {
+        initialState,
         actualState,
         fromPos,
         holdedFigure,
         grabbingPos,
         possibleMoves,
+        newMove,
 
         setActualState,
         selectFrom,
         handleGrabbing,
         handleGrabEnd,
+        handleClick,
+        setInitialState,
     } = useChessBoardInteractive();
 
     useEffect(() => {
         const positions = FENtoGameState(FEN);
+        setInitialState(positions.boardState);
         setActualState(positions.boardState);
     }, [FEN])
 
@@ -39,8 +44,8 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         <div className={styles.chessBoard}>
             <ChessBoardCellsLayout />
             <ChessBoardFiguresLayout 
-                initialState={actualState}
-                change={change}
+                initialState={initialState}
+                change={newMove}
             />
             <ChessBoardInteractiveLayout 
                 selectedPos={fromPos}
@@ -49,10 +54,14 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 grabbingPos={grabbingPos}
             />
             <ChessBoardControlLayout
-                onSelect={console.log}
-                onGrabStart={selectFrom}
-                onGrabEnd={handleGrabEnd}
-                onGrabbing={handleGrabbing}
+                onClick={handleClick}
+                // onClick={() => {}}
+                // onGrabStart={selectFrom}
+                // onGrabEnd={handleGrabEnd}
+                // onGrabbing={handleGrabbing}
+                onGrabStart={() => {}}
+                onGrabEnd={() => {}}
+                onGrabbing={() => {}}
             />
         </div>
     )

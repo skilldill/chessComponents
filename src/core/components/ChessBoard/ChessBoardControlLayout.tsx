@@ -8,7 +8,7 @@ const BASE_BOARD_SIZE = 8
 type ChessBoardControlLayoutProps = {
     size?: number;
 
-    onSelect: (position: number[]) => void;
+    onClick: (position: number[]) => void;
     onGrabStart: (position: number[]) => void;
     onGrabEnd: (position: number[]) => void;
     onGrabbing: (x: number, y: number) => void;
@@ -17,7 +17,7 @@ type ChessBoardControlLayoutProps = {
 export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props) => {
     const { 
         size = BASE_BOARD_SIZE, 
-        onSelect, 
+        onClick, 
         onGrabStart,
         onGrabEnd,
         onGrabbing,
@@ -26,7 +26,7 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
     const [pressed, setPressed] = useState(false);
 
     const handleClick = (cellPos: number[]) => {
-        onSelect(cellPos);
+        onClick(cellPos);
     }
 
     const handleGrabStart = (cellPos: number[]) => {

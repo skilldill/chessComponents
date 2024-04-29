@@ -1,8 +1,10 @@
 import { Cell, Figure, FigureColor, JSChessEngine, MoveData, stateToFEN } from "../../../core/JSChessEngine";
-import { useState } from "react"
-import { checkPositionsHas } from "./utils";
+import { useEffect, useState } from "react"
+import { checkIsPossibleMove, checkPositionsHas } from "./utils";
+import { ChangeMove } from "./models";
 
 export const useChessBoardInteractive = () => {
+  const [initialState, setInitialState] = useState<Cell[][]>([]);
   const [actualState, setActualState] = useState<Cell[][]>([]);
   const [fromPos, setFromPos] = useState<number[]>([-1, -1]);
   const [holdedFigure, setHoldedFigure] = useState<Figure>();
@@ -11,11 +13,19 @@ export const useChessBoardInteractive = () => {
   const [boardReversed, setBoardReversed] = useState(false);
   const [currentColor, setCurrentColor] = useState<FigureColor>('white');
   const [playerColor, setPlayerColor] = useState<FigureColor>();
+  const [newMove, setNewMove] = useState<ChangeMove>();
 
   const clearFromPos = () => setFromPos([-1, -1]);
   const clearGrabbingPos = () => setGrabbingPos([-1, -1]);
   const clearPossibleMoves = () => setPossibleMoves([]);
   const toggleCurrentColor = () => setCurrentColor((prevColor) => prevColor === 'white' ? 'black' : 'white');
+
+  const cleanAll = () => {
+    setHoldedFigure(undefined);
+    clearFromPos();
+    clearGrabbingPos();
+    clearPossibleMoves();
+  }
 
   const selectFrom = (cellPos: number[]) => {
     const cell = actualState[cellPos[1]][cellPos[0]];
@@ -93,41 +103,59 @@ export const useChessBoardInteractive = () => {
     return moveData;
   }
 
-  const handleGrabStart = (cellPos: number[]) => {
-
-  }
+  
 
   const handleGrabbing = (x: number, y: number) => {
     setGrabbingPos([x, y]);
   }
 
-  const handleGrabEnd = (cellPos: number[]) => {
+  const handleGrabEnd = (cellPos: number[], withTransition = false) => {
     if (fromPos[0] === -1) return;
     if (!holdedFigure) return;
     if (possibleMoves.length === 0) return;
     
-    const foundPosInPossible = possibleMoves.find(([possibleX, possibleY]) => 
-          possibleX === cellPos[0] && possibleY === cellPos[1]
-    );
+    const foundPosInPossible = checkIsPossibleMove(possibleMoves, cellPos);
 
     if (!foundPosInPossible) return;
     
-    console.log(moveFigure(fromPos, cellPos, holdedFigure));
+    const move = moveFigure(fromPos, cellPos, holdedFigure);
+    if (!move) return;
+
+    setNewMove({ moves: [move], withTransition });
 
     clearGrabbingPos();
+    clearPossibleMoves();
+  }
+
+  const handleClick = (cellPos: number[]) => {
+    if (fromPos[0] === -1) {
+      selectFrom(cellPos);
+      return;
+    }
+    
+    const foundPosInPossible = checkIsPossibleMove(possibleMoves, cellPos);
+    if (!foundPosInPossible) {
+      cleanAll();
+      return;
+    }
+
+    handleGrabEnd(cellPos, true);
   }
 
   return {
     fromPos,
-    actualState,
-    holdedFigure,
     grabbingPos,
+    actualState,
+    initialState,
+    holdedFigure,
     possibleMoves,
+    newMove,
 
+    setInitialState,
     setActualState,
     selectFrom,
     clearFromPos,
-    handleGrabStart,
+    handleClick,
     handleGrabbing,
     handleGrabEnd,
   }
