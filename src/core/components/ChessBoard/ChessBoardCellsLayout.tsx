@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from './ChessBoard.module.css';
-import { getFilledArrayBySize, getIsLightCell } from "../../../utils/figures.utils";
+import { getFilledArrayBySize, getIsLightCell } from "./utils";
 import cn from 'classnames';
 
 const BASE_BOARD_SIZE = 8;

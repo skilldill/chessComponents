@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { checkIsPossibleMove, getFigureCSS, getFilledArrayBySize } from "../../../utils/figures.utils";
+import { checkIsPossibleMove, getFigureCSS, getFilledArrayBySize } from "./utils";
 import styles from './ChessBoard.module.css';
 import cn from 'classnames';
 import { Figure } from "../../../core/JSChessEngine";

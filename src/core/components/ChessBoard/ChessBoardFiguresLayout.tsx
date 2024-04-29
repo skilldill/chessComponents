@@ -2,7 +2,7 @@ import { Cell, Figure, MoveData } from "../../../core/JSChessEngine";
 import { FC, useEffect, useState } from "react";
 import styles from './ChessBoard.module.css';
 import cn from 'classnames';
-import { getFigureCSS, mapCellsToFiguresArray } from "../../../utils/figures.utils";
+import { getFigureCSS, mapCellsToFiguresArray } from "./utils";
 import { DEFAULT_CELL_SIZE } from "./constants";
 
 type ChessBoardFiguresLayoutProps = {

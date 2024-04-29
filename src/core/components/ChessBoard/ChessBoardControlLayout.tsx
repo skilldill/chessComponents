@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useState } from "react";
 import styles from './ChessBoard.module.css';
-import { getFilledArrayBySize } from "../../../utils/figures.utils";
+import { getFilledArrayBySize } from "./utils";
 import cn from 'classnames';
 
 const BASE_BOARD_SIZE = 8

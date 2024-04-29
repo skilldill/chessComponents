@@ -1,7 +1,7 @@
 import { Figure } from "../../../core/JSChessEngine";
 import { FC } from "react";
 import styles from './ChessBoard.module.css';
-import { getFigureCSS } from "../../../utils/figures.utils";
+import { getFigureCSS } from "./utils";
 import cn from 'classnames';
 import { DEFAULT_CELL_SIZE } from "./constants";
 

@@ -55,3 +55,21 @@ export const checkIsPossibleMove = (possibleMoves: number[][], position: number[
         possibleMove[0] === position[0] && possibleMove[1] === position[1]
     );
 }
+
+/**
+ * Проверяет находится ли проверяемая позиция в
+ * наборе позиций
+ * @param positions набор позиций
+ * @param pos позиция
+ */
+export const checkPositionsHas = (
+    positions: number[][] | undefined,
+    pos: number[]
+  ) => {
+    if (!positions) return false;
+  
+    return !!positions.find(
+      (posItem) => posItem[0] === pos[0] && posItem[1] === pos[1]
+    );
+  };
+  
