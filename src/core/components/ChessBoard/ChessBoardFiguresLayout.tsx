@@ -1,4 +1,4 @@
-import { Cell, Figure, MoveData } from "../../../core/JSChessEngine";
+import { Cell, Figure } from "../../../core/JSChessEngine";
 import { FC, useEffect, useState } from "react";
 import styles from './ChessBoard.module.css';
 import cn from 'classnames';
@@ -22,17 +22,31 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
 
     useEffect(() => {
         if (!!change) {
-            // console.log(change.withTransition);
             setActualState((prevState) => {
                 const updatedState = [...prevState];
 
+                // Добавить обработку рокеровок
+
                 change.moves.forEach((moveData) => {
-                    const foundFigureByPosition = updatedState.find((figure) => 
-                        figure.position![0] === moveData.from[0]
-                        && figure.position![1] === moveData.from[1]
+                    const { from, to } = moveData;
+
+                    const foundAttactedFigure = updatedState.find((figure) => 
+                        figure.position![0] === to[0]
+                        && figure.position![1] === to[1]
                     );
 
-                    foundFigureByPosition!.position! = moveData.to; 
+                    if (foundAttactedFigure) {
+                        foundAttactedFigure.color === 'white' 
+                        ? foundAttactedFigure.position = [8, foundAttactedFigure.position![1]]
+                        : foundAttactedFigure.position = [-1, foundAttactedFigure.position![1]]
+                    };
+
+                    const foundFigureByPositionFrom = updatedState.find((figure) => 
+                        figure.position![0] === from[0]
+                        && figure.position![1] === from[1]
+                    );
+
+                    foundFigureByPositionFrom!.position! = moveData.to; 
                 });
 
                 return updatedState;
@@ -40,13 +54,14 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
         }
     }, [change])
 
-
     return (
         <div className={styles.figuresLayout}>
             {actualState.map((figure, i) => 
                 <div 
                     key={i}
-                    className={cn([styles.figure, getFigureCSS(figure)])}
+                    className={cn([styles.figure, getFigureCSS(figure)], {
+                        [styles.hiddenFigure]: figure.position![0] === -1 || figure.position![0] === 8 
+                    })}
                     style={{ 
                         top: `${DEFAULT_CELL_SIZE * figure.position![1]}px`, 
                         left: `${DEFAULT_CELL_SIZE * figure.position![0]}px`,

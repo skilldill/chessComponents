@@ -3,7 +3,13 @@ import { useEffect, useState } from "react"
 import { checkIsPossibleMove, checkPositionsHas } from "./utils";
 import { ChangeMove } from "./models";
 
-export const useChessBoardInteractive = () => {
+type UseChessBoardInteractiveProps = {
+  onChange: (moveData: MoveData) => void;
+}
+
+export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) => {
+  const { onChange } = props;
+
   const [initialState, setInitialState] = useState<Cell[][]>([]);
   const [actualState, setActualState] = useState<Cell[][]>([]);
   const [fromPos, setFromPos] = useState<number[]>([-1, -1]);
@@ -14,6 +20,7 @@ export const useChessBoardInteractive = () => {
   const [currentColor, setCurrentColor] = useState<FigureColor>('white');
   const [playerColor, setPlayerColor] = useState<FigureColor>();
   const [newMove, setNewMove] = useState<ChangeMove>();
+  const [linesWithCheck, setLinesWithCheck] = useState<number[][][]>([]);
 
   const clearFromPos = () => setFromPos([-1, -1]);
   const clearGrabbingPos = () => setGrabbingPos([-1, -1]);
@@ -31,9 +38,14 @@ export const useChessBoardInteractive = () => {
     const cell = actualState[cellPos[1]][cellPos[0]];
 
     if (!cell.figure) {
-      clearFromPos();
-      clearPossibleMoves();
-      setHoldedFigure(undefined);
+      cleanAll();
+      return;
+    }
+
+    const { figure } = cell;
+
+    if (figure.color !== currentColor) {
+      cleanAll();
       return;
     }
 
@@ -121,6 +133,8 @@ export const useChessBoardInteractive = () => {
     const move = moveFigure(fromPos, cellPos, holdedFigure);
     if (!move) return;
 
+    onChange(move);
+
     setNewMove({ moves: [move], withTransition });
 
     clearGrabbingPos();
@@ -158,5 +172,6 @@ export const useChessBoardInteractive = () => {
     handleClick,
     handleGrabbing,
     handleGrabEnd,
+    setCurrentColor,
   }
 }

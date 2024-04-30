@@ -94,3 +94,7 @@
 .bluredFigure {
     opacity: .4;
 }
+
+.hiddenFigure {
+    opacity: 0;
+}

@@ -9,13 +9,13 @@ import { ChessBoardInteractiveLayout } from "./ChessBoardInteractiveLayout";
 
 type ChessBoardProps = {
     FEN: string;
-    onChange: (FEN: string) => void;
+    onChange: (moveData: MoveData) => void;
     color: FigureColor;
     change?: MoveData[]
 }
 
 export const ChessBoard: FC<ChessBoardProps> = (props) => {
-    const { FEN, change } = props;
+    const { FEN, onChange, change } = props;
 
     const {
         initialState,
@@ -32,12 +32,14 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         handleGrabEnd,
         handleClick,
         setInitialState,
-    } = useChessBoardInteractive();
+        setCurrentColor
+    } = useChessBoardInteractive({ onChange });
 
     useEffect(() => {
-        const positions = FENtoGameState(FEN);
-        setInitialState(positions.boardState);
-        setActualState(positions.boardState);
+        const { boardState, currentColor } = FENtoGameState(FEN);
+        setInitialState(boardState);
+        setActualState(boardState);
+        setCurrentColor(currentColor);
     }, [FEN])
 
     return (
@@ -54,11 +56,12 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 grabbingPos={grabbingPos}
             />
             <ChessBoardControlLayout
-                onClick={handleClick}
                 // onClick={() => {}}
                 // onGrabStart={selectFrom}
                 // onGrabEnd={handleGrabEnd}
                 // onGrabbing={handleGrabbing}
+                
+                onClick={handleClick}
                 onGrabStart={() => {}}
                 onGrabEnd={() => {}}
                 onGrabbing={() => {}}
