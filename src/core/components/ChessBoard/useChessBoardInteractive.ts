@@ -173,6 +173,7 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
 
     setInitialState,
     setActualState,
+    setNewMove,
     selectFrom,
     clearFromPos,
     handleClick,
