@@ -11,11 +11,12 @@ type ChessBoardProps = {
     FEN: string;
     onChange: (moveData: MoveData) => void;
     color: FigureColor;
-    change?: MoveData[]
+    change?: MoveData[];
+    reversed?: boolean;
 }
 
 export const ChessBoard: FC<ChessBoardProps> = (props) => {
-    const { FEN, onChange, change } = props;
+    const { FEN, onChange, change, reversed } = props;
 
     const {
         initialState,
@@ -32,7 +33,8 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         handleGrabEnd,
         handleClick,
         setInitialState,
-        setCurrentColor
+        setCurrentColor,
+        reverseChessBoard,
     } = useChessBoardInteractive({ onChange });
 
     useEffect(() => {
@@ -42,14 +44,19 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         setCurrentColor(currentColor);
     }, [FEN])
 
+    useEffect(() => {
+        if (reversed) reverseChessBoard();
+    }, [reversed])
+
     return (
         <div className={styles.chessBoard}>
             <ChessBoardCellsLayout />
             <ChessBoardFiguresLayout 
                 initialState={initialState}
                 change={newMove}
+                reversed={reversed}
             />
-            <ChessBoardInteractiveLayout 
+            <ChessBoardInteractiveLayout
                 selectedPos={fromPos}
                 possibleMoves={possibleMoves}
                 holdedFigure={holdedFigure}

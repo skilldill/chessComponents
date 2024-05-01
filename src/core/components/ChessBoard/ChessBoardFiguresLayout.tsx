@@ -1,19 +1,19 @@
-import { Cell, Figure } from "../../../core/JSChessEngine";
+import { Cell, Figure, JSChessEngine } from "../../../core/JSChessEngine";
 import { FC, useEffect, useState } from "react";
 import styles from './ChessBoard.module.css';
 import cn from 'classnames';
-import { getFigureCSS, mapCellsToFiguresArray } from "./utils";
+import { checkIsCastlingMove, getFigureCSS, mapCellsToFiguresArray } from "./utils";
 import { DEFAULT_CELL_SIZE } from "./constants";
 import { ChangeMove } from "./models";
 
 type ChessBoardFiguresLayoutProps = {
     initialState: Cell[][];
     change?: ChangeMove; // chage is array for correct rndering transitions for castling
-    blurPosition?: number[];
+    reversed?: boolean;
 }
 
 export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props) => {
-    const { initialState, change } = props;
+    const { initialState, change, reversed } = props;
     const [actualState, setActualState] = useState<Figure[]>([]);
 
     useEffect(() => {
@@ -24,35 +24,106 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
         if (!!change) {
             setActualState((prevState) => {
                 const updatedState = [...prevState];
+                const { move } = change;
 
-                // Добавить обработку рокеровок
+                if (checkIsCastlingMove(move)) {
+                    const castlingType = JSChessEngine.getCastlingType(move);
+                    const { color } = move.figure;
 
-                change.moves.forEach((moveData) => {
-                    const { from, to } = moveData;
+                    if (color === 'white') {
+                        const kingIndex = updatedState.findIndex((figure) => 
+                            figure.color === 'white' && figure.type === 'king'
+                        );
 
-                    const foundAttactedFigure = updatedState.find((figure) => 
-                        figure.position![0] === to[0]
-                        && figure.position![1] === to[1]
-                    );
+                        if (castlingType === '0-0') {
+                            const rookIndex = updatedState.findIndex((figure) => 
+                                figure.color === color
+                                && figure.type === 'rook'
+                                && figure.position![0] === 7
+                            );
+                            updatedState[rookIndex].position![0] = 5;
+                            updatedState[kingIndex].position![0] = 6;
 
-                    if (foundAttactedFigure) {
-                        foundAttactedFigure.color === 'white' 
-                        ? foundAttactedFigure.position = [8, foundAttactedFigure.position![1]]
-                        : foundAttactedFigure.position = [-1, foundAttactedFigure.position![1]]
-                    };
+                            return updatedState;
+                        }
 
-                    const foundFigureByPositionFrom = updatedState.find((figure) => 
-                        figure.position![0] === from[0]
-                        && figure.position![1] === from[1]
-                    );
+                        const rookIndex = updatedState.findIndex((figure) => 
+                            figure.color === color
+                            && figure.type === 'rook'
+                            && figure.position![0] === 0
+                        );
+                        updatedState[rookIndex].position![0] = 3;
+                        updatedState[kingIndex].position![0] = 2;
 
-                    foundFigureByPositionFrom!.position! = moveData.to; 
-                });
+                        return updatedState;
+                    }
+
+                    if (color === 'black') {
+                        const kingIndex = updatedState.findIndex((figure) => 
+                            figure.color === 'black' && figure.type === 'king'
+                        );
+
+                        if (castlingType === '0-0') {
+                            const rookIndex = updatedState.findIndex((figure) => 
+                                figure.color === color
+                                && figure.type === 'rook'
+                                && figure.position![0] === 7
+                            );
+                            updatedState[rookIndex].position![0] = 5;
+                            updatedState[kingIndex].position![0] = 6;
+
+                            return updatedState;
+                        }
+
+                        const rookIndex = updatedState.findIndex((figure) => 
+                            figure.color === color
+                            && figure.type === 'rook'
+                            && figure.position![0] === 0
+                        );
+                        updatedState[rookIndex].position![0] = 3;
+                        updatedState[kingIndex].position![0] = 2;
+
+                        return updatedState;
+                    }
+
+                    return updatedState;
+                }
+
+                const { from, to } = move;
+
+                const foundAttactedFigure = updatedState.find((figure) => 
+                    figure.position![0] === to[0]
+                    && figure.position![1] === to[1]
+                );
+
+                if (foundAttactedFigure) {
+                    foundAttactedFigure.color === 'white'
+                    ? foundAttactedFigure.position = [8, foundAttactedFigure.position![1]]
+                    : foundAttactedFigure.position = [-1, foundAttactedFigure.position![1]]
+                };
+
+                const foundFigureByPositionFrom = updatedState.find((figure) => 
+                    figure.position![0] === from[0]
+                    && figure.position![1] === from[1]
+                );
+
+                foundFigureByPositionFrom!.position! = move.to;
 
                 return updatedState;
             });
         }
     }, [change])
+
+    useEffect(() => {
+        console.log(reversed);
+        setActualState((prevState) => prevState.map((figure) => ({
+            ...figure,
+            position: [
+                figure.position![0],
+                Math.abs(7 - figure.position![1])
+            ]
+        })));
+    }, [reversed])
 
     return (
         <div className={styles.figuresLayout}>

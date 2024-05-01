@@ -1,9 +1,9 @@
-import { Cell, Figure } from "core/JSChessEngine";
+import { Cell, Figure, MoveData } from "core/JSChessEngine";
 
 /**
  * Возвращает класс для фигуры в клетке
  */
-export const getFigureCSS = (figure: Figure) => 
+export const getFigureCSS = (figure: Figure) =>
     `${figure.type}-${figure.color}`;
 
 /**
@@ -19,7 +19,7 @@ export const getIsLightCell = (rowId: number, cellId: number) =>
 export const getFilledArrayBySize = (size: number) => {
     const array: number[] = [];
 
-    for(let i = 0; i < size; i++) {
+    for (let i = 0; i < size; i++) {
         array.push(i);
     }
 
@@ -51,7 +51,7 @@ export const mapCellsToFiguresArray = (boardState: Cell[][]) => {
  * @param position позиция для проверки
  */
 export const checkIsPossibleMove = (possibleMoves: number[][], position: number[]) => {
-    return !!possibleMoves.find((possibleMove) => 
+    return !!possibleMoves.find((possibleMove) =>
         possibleMove[0] === position[0] && possibleMove[1] === position[1]
     );
 }
@@ -65,11 +65,25 @@ export const checkIsPossibleMove = (possibleMoves: number[][], position: number[
 export const checkPositionsHas = (
     positions: number[][] | undefined,
     pos: number[]
-  ) => {
+) => {
     if (!positions) return false;
-  
+
     return !!positions.find(
-      (posItem) => posItem[0] === pos[0] && posItem[1] === pos[1]
+        (posItem) => posItem[0] === pos[0] && posItem[1] === pos[1]
     );
-  };
-  
+};
+
+/**
+ * Проверяет, является ли ход рокеровкой
+ * @param moveData 
+ * @returns 
+ */
+export const checkIsCastlingMove = (moveData: MoveData) => {
+    const { figure, from, to } = moveData;
+    if (figure.type !== 'king') return false;
+    if (from[1] !== to[1]) return false;
+    const horizontalDiff = Math.abs(to[0] - from[0]);
+    if (horizontalDiff === 1) return false;
+
+    return true;
+}

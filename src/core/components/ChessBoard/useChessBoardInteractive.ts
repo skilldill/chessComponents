@@ -34,6 +34,12 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     clearPossibleMoves();
   }
 
+  const reverseChessBoard = () => {
+    cleanAll();
+    setActualState((prevState) => JSChessEngine.reverseChessBoard(prevState));
+    setBoardReversed((prevReversed) => !prevReversed);
+  }
+
   const selectFrom = (cellPos: number[]) => {
     const cell = actualState[cellPos[1]][cellPos[0]];
 
@@ -53,7 +59,7 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
       actualState,
       cellPos,
       [], // TODO: добавить линии с шахом
-      false // Добавить определение reverse
+      boardReversed // Добавить определение reverse
     );
 
     setPossibleMoves(nextMoves);
@@ -135,7 +141,7 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
 
     onChange(move);
 
-    setNewMove({ moves: [move], withTransition });
+    setNewMove({ move, withTransition });
 
     clearGrabbingPos();
     clearPossibleMoves();
@@ -173,5 +179,6 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     handleGrabbing,
     handleGrabEnd,
     setCurrentColor,
+    reverseChessBoard,
   }
 }

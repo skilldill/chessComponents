@@ -1,6 +1,6 @@
 import { MoveData } from "core/JSChessEngine"
 
 export type ChangeMove = {
-    moves: MoveData[];
+    move: MoveData;
     withTransition?: boolean;
 }
