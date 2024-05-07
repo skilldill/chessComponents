@@ -1817,7 +1817,13 @@ export class JSChessEngine {
         targetPos: number[],
         prevPos: number[],
         reverse: boolean
-    ) => {
+    ) : { updatedCells: Cell[][], attackedPos?: number[] } => {
+        // Необходимо для записи атакованного поля
+        // на данный момент нужно для того чтобы
+        // записать какое было атаковано при переходе на битую позицию
+        // чтобы корректно показать анимированный переход на битое поле
+        let attackedPos: number[] | undefined = undefined;
+
         // Для определения рокировки
         const diffHorizontal = targetPos[0] - prevPos[0];
 
@@ -1836,7 +1842,7 @@ export class JSChessEngine {
             if (diffHorizontal > 0) {
                 if (reverse) {
                     // 0-0-0
-                    const updatedCell: Cell[][] = state.map((row, j) =>
+                    const updatedCells: Cell[][] = state.map((row, j) =>
                         row.map((cell, i) => {
                             if (j === prevPos[1] && i === 4) {
                                 return {
@@ -1874,10 +1880,10 @@ export class JSChessEngine {
                         })
                     );
 
-                    return updatedCell;
+                    return { updatedCells, attackedPos };
                 } else {
                     // 0-0
-                    const updatedCell: Cell[][] = state.map((row, j) =>
+                    const updatedCells: Cell[][] = state.map((row, j) =>
                         row.map((cell, i) => {
                             if (j === prevPos[1] && i === 5) {
                                 return {
@@ -1915,14 +1921,14 @@ export class JSChessEngine {
                         })
                     );
 
-                    return updatedCell;
+                    return { updatedCells, attackedPos };
                 }
             }
 
             if (diffHorizontal < 0) {
                 if (reverse) {
                     // 0-0
-                    const updatedCell: Cell[][] = state.map((row, j) =>
+                    const updatedCells: Cell[][] = state.map((row, j) =>
                         row.map((cell, i) => {
                             if (j === prevPos[1] && i === 2) {
                                 return {
@@ -1960,10 +1966,10 @@ export class JSChessEngine {
                         })
                     );
 
-                    return updatedCell;
+                    return { updatedCells, attackedPos };
                 } else {
                     // 0-0-0
-                    const updatedCell: Cell[][] = state.map((row, j) =>
+                    const updatedCells: Cell[][] = state.map((row, j) =>
                         row.map((cell, i) => {
                             if (j === prevPos[1] && i === 3) {
                                 return {
@@ -2001,7 +2007,7 @@ export class JSChessEngine {
                         })
                     );
 
-                    return updatedCell;
+                    return { updatedCells, attackedPos };
                 }
             }
         }
@@ -2030,8 +2036,9 @@ export class JSChessEngine {
                     currentFigure.type === 'pawn' &&
                     JSChessEngine.checkBeatedCell(state, targetPos) &&
                     j === prevPos[1] &&
-                    i === targetPos[0]
+                    i === targetPos[0] //these
                 ) {
+                    attackedPos = [i, j];
                     return { figure: undefined, beated: false };
                 }
 
@@ -2054,7 +2061,7 @@ export class JSChessEngine {
             })
         );
 
-        return updatedCells;
+        return { updatedCells, attackedPos };
     };
 
     /**

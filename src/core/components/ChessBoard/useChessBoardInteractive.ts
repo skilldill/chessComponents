@@ -76,9 +76,9 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     const conditionForDoMove =
       (to[0] !== from[0] || to[1] !== from[1]) && inNextMoves;
 
-    if (!conditionForDoMove) return;
+    if (!conditionForDoMove) return {};
 
-    const changedState = JSChessEngine.changeState(
+    const { updatedCells, attackedPos } = JSChessEngine.changeState(
       actualState,
       figure,
       to,
@@ -89,7 +89,7 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     // Если playetColor не задан, то
     // Доска работает в режиме анализа
     // Можно менять состояние внутри доски
-    if (playerColor === undefined) setActualState(changedState);
+    if (playerColor === undefined) setActualState(updatedCells);
 
     // Пешка дошла до конца доски
     // Показываем FigurePicker
@@ -100,11 +100,11 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     ) {
       // setTargetPos(to);
       // setShowFigurePicker(true);
-      return;
+      return {};
     }
 
     const colorFEN = currentColor === 'white' ? 'black' : 'white';
-    const FEN = stateToFEN(changedState, colorFEN)
+    const FEN = stateToFEN(updatedCells, colorFEN)
 
     // Собранные данные для отправки
     const moveData: MoveData = { figure, from, to, FEN };
@@ -118,7 +118,7 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     clearFromPos();
     clearGrabbingPos();
 
-    return moveData;
+    return { moveData, attackedPos };
   }
 
   
@@ -136,12 +136,12 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
 
     if (!foundPosInPossible) return;
     
-    const move = moveFigure(fromPos, cellPos, holdedFigure);
-    if (!move) return;
+    const { moveData, attackedPos } = moveFigure(fromPos, cellPos, holdedFigure);
+    if (!moveData) return;
 
-    onChange(move);
+    onChange(moveData);
 
-    setNewMove({ move, withTransition });
+    setNewMove({ move: moveData, withTransition, attackedPos });
 
     clearGrabbingPos();
     clearPossibleMoves();
