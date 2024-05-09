@@ -2,17 +2,18 @@ import { FC } from "react";
 import { checkIsPossibleMove, getFigureCSS, getFilledArrayBySize } from "./utils";
 import styles from './ChessBoard.module.css';
 import cn from 'classnames';
-import { Figure } from "../../../core/JSChessEngine";
+import { CellPos, Figure } from "../../../core/JSChessEngine";
 import { HoldedFigure } from "./HoldedFigure";
 
 const BASE_BOARD_SIZE = 8
 
 type ChessBoardInteractiveLayoutProps = {
     size?: number;
-    selectedPos: number[];
-    possibleMoves: number[][];
+    selectedPos: CellPos;
+    possibleMoves: CellPos[];
+    markedCells: CellPos[];
     holdedFigure?: Figure;
-    grabbingPos: number[];
+    grabbingPos: CellPos;
 }
 
 export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> = (props) => {
@@ -22,6 +23,7 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
         possibleMoves,
         holdedFigure,
         grabbingPos,
+        markedCells,
     } = props;
 
     return (
@@ -37,6 +39,7 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
                             <div 
                                 className={cn(styles.interactiveCell, { 
                                     [styles.selectedCell]: selectedPos[0] === i && selectedPos[1] === j,
+                                    [styles.markedCell]: checkIsPossibleMove(markedCells, [i, j]),
                                 })}
                                 key={`interactive-layout-${i}`}
                             >

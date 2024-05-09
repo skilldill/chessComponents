@@ -26,6 +26,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         grabbingPos,
         possibleMoves,
         newMove,
+        markedCells,
 
         setActualState,
         selectFrom,
@@ -36,6 +37,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         setCurrentColor,
         reverseChessBoard,
         setNewMove,
+        markCell,
     } = useChessBoardInteractive({ onChange });
 
     useEffect(() => {
@@ -66,6 +68,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 possibleMoves={possibleMoves}
                 holdedFigure={holdedFigure}
                 grabbingPos={grabbingPos}
+                markedCells={markedCells}
             />
             <ChessBoardControlLayout
                 // onClick={() => {}}
@@ -77,6 +80,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 onGrabStart={() => {}}
                 onGrabEnd={() => {}}
                 onGrabbing={() => {}}
+                onRightClick={markCell}
             />
         </div>
     )

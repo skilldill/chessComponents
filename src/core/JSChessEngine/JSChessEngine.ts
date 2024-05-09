@@ -7,11 +7,13 @@ export type FigureType =
     | 'king';
 export type FigureColor = 'white' | 'black';
 
+export type CellPos = [number, number];
+
 export interface Figure {
     type: FigureType;
     color: FigureColor;
     touched?: boolean;
-    position?: number[];
+    position?: CellPos;
 }
 
 export type CellColor = 'white' | 'black';
@@ -74,13 +76,13 @@ export interface GameResult {
 export type PawnMoveType = 'first' | 'default' | 'attack';
 
 export interface MoveByPawn {
-    pos: number[];
+    pos: CellPos;
     typeMove: PawnMoveType;
 }
 
 export interface MoveData {
-    from: number[];
-    to: number[];
+    from: CellPos;
+    to: CellPos;
     figure: Figure;
     type?: MoveType;
     FEN?: string;
@@ -100,8 +102,8 @@ export type CastlingType = '0-0' | '0-0-0';
 
 export type OnCheckPossible = (
     state: Cell[][],
-    figurePos: number[],
-    targetPos: number[],
+    figurePos: CellPos,
+    targetPos: CellPos,
 ) => boolean;
 
 const DIRECTIONS_D: MoveDirection[] = [
@@ -131,14 +133,14 @@ export class JSChessEngine {
      */
     static getNextMoves = (
         state: Cell[][],
-        [i, j]: number[],
-        linesWithCheck: number[][][],
+        [i, j]: CellPos,
+        linesWithCheck: CellPos[][],
         revese = false
-    ): number[][] => {
+    ): CellPos[] => {
         const figure = state[j][i].figure!;
         const { type } = figure;
 
-        let nextPositions: number[][] = [];
+        let nextPositions: CellPos[] = [];
 
         switch (type) {
             case 'pawn':
@@ -251,7 +253,7 @@ export class JSChessEngine {
      * @param moveVector Координаты начала и конца хода фигуры
      * @param boardSize размер доски
      */
-    static reverseMoveVector = (moveVector: number[][], boardSize = 8) => {
+    static reverseMoveVector = (moveVector: CellPos[], boardSize = 8) => {
         const [from, to] = moveVector;
         const reversedMoveVector = [
             [boardSize - (from[0] + 1), boardSize - (from[1] + 1)],
@@ -266,7 +268,7 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param pos проверяемая позиция
      */
-    static checkInBorderBoard = (state: Cell[][], pos: number[]) => {
+    static checkInBorderBoard = (state: Cell[][], pos: CellPos) => {
         return (
             pos[0] >= 0 &&
             pos[0] < state.length &&
@@ -280,7 +282,7 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param pos позиция фигуры
      */
-    static getFigureColor = (state: Cell[][], pos: number[]) => {
+    static getFigureColor = (state: Cell[][], pos: CellPos) => {
         return state[pos[1]][pos[0]].figure!.color;
     };
 
@@ -289,7 +291,7 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param pos позиция фигуры
      */
-    static getFigureType = (state: Cell[][], pos: number[]) => {
+    static getFigureType = (state: Cell[][], pos: CellPos) => {
         return state[pos[1]][pos[0]].figure?.type;
     };
 
@@ -299,7 +301,7 @@ export class JSChessEngine {
      * @param pos положение фигуры союзного цвета
      * @param target положение фигуры - цели
      */
-    static checkEnemy = (state: Cell[][], pos: number[], target: number[]) => {
+    static checkEnemy = (state: Cell[][], pos: CellPos, target: CellPos) => {
         const color = JSChessEngine.getFigureColor(state, pos);
         const targetColor = state[target[1]][target[0]]?.figure?.color;
 
@@ -312,7 +314,7 @@ export class JSChessEngine {
      * @param pos положение фигуры союзного цвета
      * @param target положение фигуры - цели
      */
-    static checkTeammate = (state: Cell[][], pos: number[], target: number[]) => {
+    static checkTeammate = (state: Cell[][], pos: CellPos, target: CellPos) => {
         const color = JSChessEngine.getFigureColor(state, pos);
         const targetColor = state[target[1]][target[0]].figure?.color;
 
@@ -327,8 +329,8 @@ export class JSChessEngine {
      */
     static checkEnemyKing = (
         state: Cell[][],
-        pos: number[],
-        target: number[]
+        pos: CellPos,
+        target: CellPos
     ) => {
         const isKing = state[target[1]][target[0]]?.figure?.type === 'king';
 
@@ -343,7 +345,7 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param target позиция проверяемой клетки
      */
-    static checkBeatedCell = (state: Cell[][], target: number[]) => {
+    static checkBeatedCell = (state: Cell[][], target: CellPos) => {
         return !!state[target[1]][target[0]]?.beated;
     };
 
@@ -353,7 +355,7 @@ export class JSChessEngine {
      * @param pos проверяемая позиция
      * @returns
      */
-    static hasFigure = (state: Cell[][], pos: number[]) => {
+    static hasFigure = (state: Cell[][], pos: CellPos) => {
         return !!state[pos[1]][pos[0]]?.figure;
     };
 
@@ -363,7 +365,7 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param figurePos позиция фигуры
      */
-    static checkFigureIsLongRange = (state: Cell[][], figurePos: number[]) => {
+    static checkFigureIsLongRange = (state: Cell[][], figurePos: CellPos) => {
         const { figure } = state[figurePos[1]][figurePos[0]];
         return (
             figure?.type === 'bishop' ||
@@ -380,8 +382,8 @@ export class JSChessEngine {
      */
     static getCountEnemys = (
         state: Cell[][],
-        figurePos: number[],
-        positions: number[][]
+        figurePos: CellPos,
+        positions: CellPos[]
     ) => {
         let count = 0;
 
@@ -402,10 +404,10 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param figurePos позиция фигуры
      */
-    static getTeammateKingPos = (state: Cell[][], figurePos: number[]) => {
+    static getTeammateKingPos = (state: Cell[][], figurePos: CellPos) => {
         const figureColor = JSChessEngine.getFigureColor(state, figurePos);
 
-        let kingPos: number[] | undefined = undefined;
+        let kingPos: CellPos | undefined = undefined;
 
         // Используется цикл для того чтобы можно было остановить поиск
         for (let j = 0; j < state.length; j++) {
@@ -433,8 +435,8 @@ export class JSChessEngine {
      * @param state состояние доски
      * @param pos позиция союзной фигуры
      */
-    static getAllEnemysPositions = (state: Cell[][], pos: number[]) => {
-        const enemysPos: number[][] = [];
+    static getAllEnemysPositions = (state: Cell[][], pos: CellPos) => {
+        const enemysPos: CellPos[] = [];
 
         state.forEach((row, j) =>
             row.forEach((_, i) => {
@@ -454,7 +456,7 @@ export class JSChessEngine {
         state: Cell[][],
         color: FigureColor
     ) => {
-        const positions: number[][] = [];
+        const positions: CellPos[] = [];
 
         state.forEach((row, j) =>
             row.forEach((cell, i) => {
@@ -476,8 +478,8 @@ export class JSChessEngine {
      */
     static checkPossibleMoveTo = (
         state: Cell[][],
-        pos: number[],
-        target: number[]
+        pos: CellPos,
+        target: CellPos
     ) => {
         // Если позиция находится за пределами доски, то сразу false
         return (
@@ -501,8 +503,8 @@ export class JSChessEngine {
      */
     static checkPossibleAttackTo = (
         state: Cell[][],
-        figurePos: number[],
-        target: number[]
+        figurePos: CellPos,
+        target: CellPos
     ) => {
         // Если позиция находится за пределами доски, то сразу false
         return (
@@ -521,8 +523,8 @@ export class JSChessEngine {
      */
     static checkAttackedCell = (
         state: Cell[][],
-        pos: number[],
-        target: number[]
+        pos: CellPos,
+        target: CellPos
     ) => {
         // Если позиция находится за пределами доски, то сразу false
         return JSChessEngine.checkInBorderBoard(state, target);
@@ -537,7 +539,7 @@ export class JSChessEngine {
      */
     static checkAttackedCellByPawn = (
         state: Cell[][],
-        pos: number[],
+        pos: CellPos,
         target: MoveByPawn
     ) => {
         switch (target.typeMove) {
@@ -559,9 +561,9 @@ export class JSChessEngine {
      */
     static checkPosBetweenAttckerAndKing = (
         state: Cell[][],
-        pos: number[],
-        kingPos: number[],
-        attackerPos: number[]
+        pos: CellPos,
+        kingPos: CellPos,
+        attackerPos: CellPos
     ) => {
         // Проверка горизонтальных и вертикальных атак
         if (pos[0] === attackerPos[0] && pos[0] === kingPos[0]) {
@@ -612,9 +614,9 @@ export class JSChessEngine {
      */
     static correctionPossibleMoves = (
         state: Cell[][],
-        figurePos: number[],
-        possibleMoves: number[][],
-        linesWithCheck: number[][][]
+        figurePos: CellPos,
+        possibleMoves: CellPos[],
+        linesWithCheck: CellPos[][]
     ) => {
         const kingPos = JSChessEngine.getTeammateKingPos(state, figurePos)!;
 
@@ -626,7 +628,7 @@ export class JSChessEngine {
             JSChessEngine.checkFigureIsLongRange(state, pos)
         );
 
-        const correctedPossibleMoves: number[][] = [];
+        const correctedPossibleMoves: CellPos[] = [];
 
         let kingBehidFigure = false;
 
@@ -807,7 +809,7 @@ export class JSChessEngine {
         // Если линия с шахом только одна
         // то фигура способна зашитить короля
         if (linesWithCheck.length === 1) {
-            const correctedMovesForProtectKing: number[][] = [];
+            const correctedMovesForProtectKing: CellPos[] = [];
 
             const attackedLine = linesWithCheck[0];
 
@@ -860,12 +862,12 @@ export class JSChessEngine {
      */
     static getFullAttackedLine = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         direction: MoveDirection
     ) => {
-        let nextMove: number[];
+        let nextMove: CellPos;
 
-        const attackedPositions: number[][] = [];
+        const attackedPositions: CellPos[] = [];
 
         switch (direction) {
             case 'top-right':
@@ -977,11 +979,11 @@ export class JSChessEngine {
      */
     static getAllAttckedPostionsByEnemys = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         reverse: boolean
     ) => {
         const enemysPos = JSChessEngine.getAllEnemysPositions(state, figurePos);
-        let attackedPositions: number[][] = [];
+        let attackedPositions: CellPos[] = [];
 
         enemysPos.forEach(([i, j]) => {
             const figure = state[j][i].figure!;
@@ -1004,7 +1006,7 @@ export class JSChessEngine {
                         state,
                         [i, j],
                         JSChessEngine.checkAttackedCell,
-                        (state, figurePos, targetPos) =>
+                        (state, _, targetPos) =>
                             JSChessEngine.hasFigure(state, targetPos) &&
                             !JSChessEngine.checkEnemyKing(state, [i, j], targetPos)
                     );
@@ -1027,7 +1029,7 @@ export class JSChessEngine {
                         state,
                         [i, j],
                         JSChessEngine.checkAttackedCell,
-                        (state, figurePos, targetPos) =>
+                        (state, _, targetPos) =>
                             JSChessEngine.hasFigure(state, targetPos) &&
                             !JSChessEngine.checkEnemyKing(state, [i, j], targetPos)
                     );
@@ -1040,7 +1042,7 @@ export class JSChessEngine {
                         state,
                         [i, j],
                         JSChessEngine.checkAttackedCell,
-                        (state, figurePos, targetPos) =>
+                        (state, _, targetPos) =>
                             JSChessEngine.hasFigure(state, targetPos) &&
                             !JSChessEngine.checkEnemyKing(state, [i, j], targetPos)
                     );
@@ -1050,7 +1052,7 @@ export class JSChessEngine {
                             state,
                             [i, j],
                             JSChessEngine.checkAttackedCell,
-                            (state, figurePos, targetPos) =>
+                            (state, _, targetPos) =>
                                 JSChessEngine.hasFigure(state, targetPos) &&
                                 !JSChessEngine.checkEnemyKing(state, [i, j], targetPos)
                         );
@@ -1086,14 +1088,14 @@ export class JSChessEngine {
      */
     static calcDiagonalMoves = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         onCheckPossible: OnCheckPossible = JSChessEngine.checkPossibleMoveTo,
         onCheckFigureInCell: OnCheckPossible = JSChessEngine.checkEnemy
     ) => {
-        const nextMoves: number[][] = [];
+        const nextMoves: CellPos[] = [];
 
         // Влево-вверх
-        let nextMove = [figurePos[0] - 1, figurePos[1] - 1];
+        let nextMove: CellPos = [figurePos[0] - 1, figurePos[1] - 1];
 
         while (onCheckPossible(state, figurePos, nextMove)) {
             nextMoves.push([...nextMove]);
@@ -1156,14 +1158,14 @@ export class JSChessEngine {
      */
     static calcHorizontalAndVerticalMoves = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         onCheckPossible: OnCheckPossible = JSChessEngine.checkPossibleMoveTo,
         onCheckFigureInCell: OnCheckPossible = JSChessEngine.checkEnemy
     ) => {
-        const nextMoves: number[][] = [];
+        const nextMoves: CellPos[] = [];
 
         // Влево
-        let nextMove = [figurePos[0] - 1, figurePos[1]];
+        let nextMove: CellPos = [figurePos[0] - 1, figurePos[1]];
 
         while (onCheckPossible(state, figurePos, nextMove)) {
             nextMoves.push([...nextMove]);
@@ -1225,12 +1227,12 @@ export class JSChessEngine {
      */
     static calcKnigtsMoves = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         onCheckPossible: OnCheckPossible = JSChessEngine.checkPossibleMoveTo
     ) => {
-        const nextMoves: number[][] = [];
+        const nextMoves: CellPos[] = [];
 
-        const possibleMoves: number[][] = [
+        const possibleMoves: CellPos[] = [
             [figurePos[0] + 1, figurePos[1] - 2],
             [figurePos[0] - 1, figurePos[1] - 2],
             [figurePos[0] - 2, figurePos[1] + 1],
@@ -1260,7 +1262,7 @@ export class JSChessEngine {
      */
     static checkPossiblePawnMoveToPos = (
         state: Cell[][],
-        pos: number[],
+        pos: CellPos,
         target: MoveByPawn,
         pawnColor: FigureColor,
         reverse: boolean
@@ -1312,14 +1314,14 @@ export class JSChessEngine {
      */
     static calcPawnMoves = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         revese: boolean,
         onCheckPossible:
             | typeof JSChessEngine.checkPossiblePawnMoveToPos
             | typeof JSChessEngine.checkAttackedCellByPawn = JSChessEngine.checkPossiblePawnMoveToPos
     ) => {
         const pawnColor = JSChessEngine.getFigureColor(state, figurePos);
-        const nextMoves: number[][] = [];
+        const nextMoves: CellPos[] = [];
 
         // Возможные позиции для пешки
         const possibleMoves: MoveByPawn[] = [
@@ -1375,8 +1377,8 @@ export class JSChessEngine {
      */
     static checkPossibleCastling = (
         state: Cell[][],
-        kingPos: number[],
-        castlingPath: number[][],
+        kingPos: CellPos,
+        castlingPath: CellPos[],
         reverse: boolean
     ) => {
         // Если короля перемещали - рокеровка невозможна
@@ -1456,13 +1458,13 @@ export class JSChessEngine {
      */
     static calcKingMoves = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         reverse: boolean,
         onlyAttacks: boolean = false
     ) => {
-        const nextMoves: number[][] = [];
+        const nextMoves: CellPos[] = [];
 
-        const possibleMoves = [
+        const possibleMoves: CellPos[] = [
             [figurePos[0], figurePos[1] - 1],
             [figurePos[0] + 1, figurePos[1] - 1],
             [figurePos[0] + 1, figurePos[1]],
@@ -1474,14 +1476,14 @@ export class JSChessEngine {
         ];
 
         // Для короткой рокеровки
-        const castlingMovesDefault = [
+        const castlingMovesDefault: CellPos[] = [
             [figurePos[0] + 1, figurePos[1]],
             [figurePos[0] + 2, figurePos[1]],
             [figurePos[0] + 3, figurePos[1]],
         ];
 
         // Для длинной рокеровки
-        const longCastlingMovesDefault = [
+        const longCastlingMovesDefault: CellPos[] = [
             [figurePos[0] - 1, figurePos[1]],
             [figurePos[0] - 2, figurePos[1]],
             [figurePos[0] - 3, figurePos[1]],
@@ -1489,14 +1491,14 @@ export class JSChessEngine {
         ];
 
         // Для короткой рокеровки (доска развернута)
-        const castlingMovesReversed = [
+        const castlingMovesReversed: CellPos[]= [
             [figurePos[0] - 1, figurePos[1]],
             [figurePos[0] - 2, figurePos[1]],
             [figurePos[0] - 3, figurePos[1]],
         ];
 
         // Для длинной рокеровки (доска развернута)
-        const longCastlingMovesReversed = [
+        const longCastlingMovesReversed: CellPos[] = [
             [figurePos[0] + 1, figurePos[1]],
             [figurePos[0] + 2, figurePos[1]],
             [figurePos[0] + 3, figurePos[1]],
@@ -1559,25 +1561,25 @@ export class JSChessEngine {
 
     static getNextMovesPawn = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         reverse: boolean
     ) => {
         return JSChessEngine.calcPawnMoves(state, figurePos, reverse);
     };
 
-    static getNextMovesBishop = (state: Cell[][], figurePos: number[]) => {
+    static getNextMovesBishop = (state: Cell[][], figurePos: CellPos) => {
         return JSChessEngine.calcDiagonalMoves(state, figurePos);
     };
 
-    static getNextMovesKnigts = (state: Cell[][], figurePos: number[]) => {
+    static getNextMovesKnigts = (state: Cell[][], figurePos: CellPos) => {
         return JSChessEngine.calcKnigtsMoves(state, figurePos);
     };
 
-    static getNextMovesRook = (state: Cell[][], figurePos: number[]) => {
+    static getNextMovesRook = (state: Cell[][], figurePos: CellPos) => {
         return JSChessEngine.calcHorizontalAndVerticalMoves(state, figurePos);
     };
 
-    static getNextMovesQueen = (state: Cell[][], figurePos: number[]) => {
+    static getNextMovesQueen = (state: Cell[][], figurePos: CellPos) => {
         const diagonalMoves = JSChessEngine.calcDiagonalMoves(state, figurePos);
         const verticalAndHorizontalMoves =
             JSChessEngine.calcHorizontalAndVerticalMoves(state, figurePos);
@@ -1588,7 +1590,7 @@ export class JSChessEngine {
 
     static getNextMovesKing = (
         state: Cell[][],
-        figurePos: number[],
+        figurePos: CellPos,
         reverse: boolean
     ) => {
         return JSChessEngine.calcKingMoves(state, figurePos, reverse);
@@ -1609,7 +1611,7 @@ export class JSChessEngine {
             activeColor
         );
 
-        const linesWithCheck: number[][][] = [];
+        const linesWithCheck: CellPos[][] = [];
 
         posTeammates.forEach((pos) => {
             const figureType = JSChessEngine.getFigureType(state, pos);
@@ -1733,7 +1735,7 @@ export class JSChessEngine {
                     break;
 
                 case 'pawn':
-                    const pawnAttackedPositions: number[][] = [];
+                    const pawnAttackedPositions: CellPos[] = [];
 
                     if (
                         (reverse && activeColor === 'white') ||
@@ -1771,7 +1773,7 @@ export class JSChessEngine {
                     break;
 
                 case 'knigts':
-                    const knigtAttackedPositions = [
+                    const knigtAttackedPositions: CellPos[] = [
                         [pos[0] + 1, pos[1] - 2],
                         [pos[0] - 1, pos[1] - 2],
                         [pos[0] - 2, pos[1] + 1],
@@ -1814,15 +1816,15 @@ export class JSChessEngine {
     static changeState = (
         state: Cell[][],
         currentFigure: Figure,
-        targetPos: number[],
-        prevPos: number[],
+        targetPos: CellPos,
+        prevPos: CellPos,
         reverse: boolean
-    ) : { updatedCells: Cell[][], attackedPos?: number[] } => {
+    ) : { updatedCells: Cell[][], attackedPos?: CellPos } => {
         // Необходимо для записи атакованного поля
         // на данный момент нужно для того чтобы
         // записать какое было атаковано при переходе на битую позицию
         // чтобы корректно показать анимированный переход на битое поле
-        let attackedPos: number[] | undefined = undefined;
+        let attackedPos: CellPos | undefined = undefined;
 
         // Для определения рокировки
         const diffHorizontal = targetPos[0] - prevPos[0];
@@ -2073,8 +2075,8 @@ export class JSChessEngine {
      */
     static transformPawnToFigure = (
         state: Cell[][],
-        fromPos: number[],
-        targetPos: number[],
+        fromPos: CellPos,
+        targetPos: CellPos,
         transformFigure: Figure
     ): Cell[][] => {
         const preparedState = [...state];
@@ -2129,7 +2131,7 @@ export class JSChessEngine {
      */
     static getGameResult = (
         state: Cell[][],
-        linesWithCheck: number[][][],
+        linesWithCheck: CellPos[][],
         activeColor: FigureColor,
         reverse: boolean
     ): GameResult | undefined => {

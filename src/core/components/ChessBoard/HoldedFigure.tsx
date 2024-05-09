@@ -1,4 +1,4 @@
-import { Figure } from "../../../core/JSChessEngine";
+import { CellPos, Figure } from "../../../core/JSChessEngine";
 import { FC } from "react";
 import styles from './ChessBoard.module.css';
 import { getFigureCSS } from "./utils";
@@ -7,7 +7,7 @@ import { DEFAULT_CELL_SIZE } from "./constants";
 
 type HoldedFigureProps = {
     holdedFigure?: Figure;
-    grabbingPos: number[];
+    grabbingPos: CellPos;
 }
 
 export const HoldedFigure: FC<HoldedFigureProps> = (props) => {

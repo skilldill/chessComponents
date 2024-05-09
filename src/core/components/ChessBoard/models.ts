@@ -1,7 +1,7 @@
-import { MoveData } from "core/JSChessEngine"
+import { CellPos, MoveData } from "core/JSChessEngine"
 
 export type ChangeMove = {
     move: MoveData;
     withTransition?: boolean;
-    attackedPos?: number[]; // for pawn and beated field
+    attackedPos?: CellPos; // for pawn and beated field
 }

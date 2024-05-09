@@ -1,4 +1,4 @@
-import { Cell, Figure, MoveData } from "core/JSChessEngine";
+import { Cell, CellPos, Figure, MoveData } from "core/JSChessEngine";
 
 /**
  * Возвращает класс для фигуры в клетке
@@ -50,7 +50,7 @@ export const mapCellsToFiguresArray = (boardState: Cell[][]) => {
  * @param possibleMoves Список возможных ходов
  * @param position позиция для проверки
  */
-export const checkIsPossibleMove = (possibleMoves: number[][], position: number[]) => {
+export const checkIsPossibleMove = (possibleMoves: CellPos[], position: CellPos) => {
     return !!possibleMoves.find((possibleMove) =>
         possibleMove[0] === position[0] && possibleMove[1] === position[1]
     );
@@ -63,8 +63,8 @@ export const checkIsPossibleMove = (possibleMoves: number[][], position: number[
  * @param pos позиция
  */
 export const checkPositionsHas = (
-    positions: number[][] | undefined,
-    pos: number[]
+    positions: CellPos[] | undefined,
+    pos: CellPos
 ) => {
     if (!positions) return false;
 
