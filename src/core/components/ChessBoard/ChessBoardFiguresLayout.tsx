@@ -123,7 +123,7 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
         setActualState((prevState) => prevState.map((figure) => ({
             ...figure,
             position: [
-                figure.position![0],
+                Math.abs(7 - figure.position![0]),
                 Math.abs(7 - figure.position![1])
             ]
         })));

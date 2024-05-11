@@ -1,6 +1,6 @@
 import { Cell, CellPos, Figure, FigureColor, JSChessEngine, MoveData, stateToFEN } from "../../../core/JSChessEngine";
 import { useState } from "react"
-import { checkIsPossibleMove, checkPositionsHas } from "./utils";
+import { checkIsPossibleMove, checkPositionsHas, hasCheck } from "./utils";
 import { ChangeMove } from "./models";
 
 type UseChessBoardInteractiveProps = {
@@ -60,8 +60,8 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
     const nextMoves = JSChessEngine.getNextMoves(
       actualState,
       cellPos,
-      [], // TODO: добавить линии с шахом
-      boardReversed // Добавить определение reverse
+      linesWithCheck,
+      boardReversed
     );
 
     setPossibleMoves(nextMoves as CellPos[]);
@@ -87,6 +87,14 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
       from,
       boardReversed
     );
+
+    const linesCheck = JSChessEngine.getLinesWithCheck(
+      updatedCells, 
+      currentColor, 
+      boardReversed
+    );
+
+    setLinesWithCheck(linesCheck);
 
     // Если playetColor не задан, то
     // Доска работает в режиме анализа
@@ -175,27 +183,36 @@ export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) =
       return [...preparedPrev, cellPos];
     });
   }
+  
+  const getHasCheckByCellPos = ([x, y]: CellPos) => {
+    if (actualState.length === 0) return false;
+    const cell = actualState[y][x];
+    if (!cell.figure) return false;
+    return hasCheck(cell, currentColor, linesWithCheck);
+  }
 
   return {
     fromPos,
+    newMove,
+    markedCells,
     grabbingPos,
     actualState,
     initialState,
     holdedFigure,
     possibleMoves,
-    newMove,
-    markedCells,
+    linesWithCheck,
 
-    setInitialState,
-    setActualState,
+    markCell,
     setNewMove,
     selectFrom,
-    clearFromPos,
     handleClick,
-    handleGrabbing,
+    clearFromPos,
     handleGrabEnd,
+    handleGrabbing,
+    setActualState,
     setCurrentColor,
+    setInitialState,
     reverseChessBoard,
-    markCell,
+    getHasCheckByCellPos,
   }
 }

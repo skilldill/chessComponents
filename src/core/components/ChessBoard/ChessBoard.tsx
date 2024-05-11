@@ -38,6 +38,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         reverseChessBoard,
         setNewMove,
         markCell,
+        getHasCheckByCellPos,
     } = useChessBoardInteractive({ onChange });
 
     useEffect(() => {
@@ -69,6 +70,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 holdedFigure={holdedFigure}
                 grabbingPos={grabbingPos}
                 markedCells={markedCells}
+                onHasCheck={getHasCheckByCellPos}
             />
             <ChessBoardControlLayout
                 // onClick={() => {}}

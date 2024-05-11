@@ -14,6 +14,7 @@ type ChessBoardInteractiveLayoutProps = {
     markedCells: CellPos[];
     holdedFigure?: Figure;
     grabbingPos: CellPos;
+    onHasCheck: (cellPos: CellPos) => boolean;
 }
 
 export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> = (props) => {
@@ -24,6 +25,7 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
         holdedFigure,
         grabbingPos,
         markedCells,
+        onHasCheck,
     } = props;
 
     return (
@@ -40,6 +42,7 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
                                 className={cn(styles.interactiveCell, { 
                                     [styles.selectedCell]: selectedPos[0] === i && selectedPos[1] === j,
                                     [styles.markedCell]: checkIsPossibleMove(markedCells, [i, j]),
+                                    [styles.checkedCell]: onHasCheck([i, j])
                                 })}
                                 key={`interactive-layout-${i}`}
                             >

@@ -1,4 +1,4 @@
-import { Cell, CellPos, Figure, MoveData } from "core/JSChessEngine";
+import { Cell, CellPos, Figure, FigureColor, MoveData } from "core/JSChessEngine";
 
 /**
  * Возвращает класс для фигуры в клетке
@@ -84,6 +84,14 @@ export const checkIsCastlingMove = (moveData: MoveData) => {
     if (from[1] !== to[1]) return false;
     const horizontalDiff = Math.abs(to[0] - from[0]);
     if (horizontalDiff === 1) return false;
-
     return true;
 }
+
+/**
+ * Проверка клетки, на то есть ли шах
+ */
+export const hasCheck = (cell: Cell, currentColor: FigureColor, linesWithCheck: CellPos[][]) => 
+    !!cell.figure &&
+    cell.figure.type === 'king' &&
+    cell.figure.color === currentColor &&
+    linesWithCheck.length > 0
