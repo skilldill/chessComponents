@@ -8,7 +8,7 @@ import { ChangeMove } from "./models";
 
 type ChessBoardFiguresLayoutProps = {
     initialState: Cell[][];
-    change?: ChangeMove; // chage is array for correct rndering transitions for castling
+    change?: ChangeMove;
     reversed?: boolean;
 }
 
@@ -119,15 +119,19 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
     }, [change])
 
     useEffect(() => {
-        console.log(reversed);
-        setActualState((prevState) => prevState.map((figure) => ({
-            ...figure,
-            position: [
-                Math.abs(7 - figure.position![0]),
-                Math.abs(7 - figure.position![1])
-            ]
-        })));
-    }, [reversed])
+        if (!reversed) return;
+
+        setActualState((prevState) => {
+            const preparedState = [...prevState];
+            return preparedState.map((figure) => ({
+                ...figure,
+                position: [
+                    Math.abs(7 - figure.position![0]),
+                    Math.abs(7 - figure.position![1])
+                ]
+            }));
+        });
+    }, [reversed, initialState])
 
     return (
         <div className={styles.figuresLayout}>
