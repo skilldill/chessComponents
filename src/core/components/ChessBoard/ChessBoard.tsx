@@ -29,7 +29,8 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         markedCells,
 
         setActualState,
-        selectFrom,
+        selectClickFrom,
+        selectHoverFrom,
         handleGrabbing,
         handleGrabEnd,
         handleClick,
@@ -73,15 +74,10 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 onHasCheck={getHasCheckByCellPos}
             />
             <ChessBoardControlLayout
-                // onClick={() => {}}
-                // onGrabStart={selectFrom}
-                // onGrabEnd={handleGrabEnd}
-                // onGrabbing={handleGrabbing}
-                
                 onClick={handleClick}
-                onGrabStart={() => {}}
-                onGrabEnd={() => {}}
-                onGrabbing={() => {}}
+                onGrabStart={selectHoverFrom}
+                onGrabEnd={handleGrabEnd}
+                onGrabbing={handleGrabbing}
                 onRightClick={markCell}
             />
         </div>
