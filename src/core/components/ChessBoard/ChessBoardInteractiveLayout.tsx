@@ -4,6 +4,7 @@ import styles from './ChessBoard.module.css';
 import cn from 'classnames';
 import { CellPos, Figure } from "../../../core/JSChessEngine";
 import { HoldedFigure } from "./HoldedFigure";
+import { CHESS_PIECIES_MAP } from "./chessPieciesMap";
 
 const BASE_BOARD_SIZE = 8
 
@@ -51,11 +52,10 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
                                         className={cn([
                                             styles.figure,
                                             styles.holdedFigure,
-                                            getFigureCSS(holdedFigure),
                                         ], {
                                             [styles.bluredFigure]: grabbingPos[0] !== -1,
                                         })}
-                                    />
+                                    >{CHESS_PIECIES_MAP[getFigureCSS(holdedFigure)]('80%')}</div>
                                 )}
                                 {checkIsPossibleMove(possibleMoves, [i, j]) && (
                                     <div className={styles.possibleMoveMark} />

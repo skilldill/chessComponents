@@ -4,6 +4,7 @@ import styles from './ChessBoard.module.css';
 import { getFigureCSS } from "./utils";
 import cn from 'classnames';
 import { DEFAULT_CELL_SIZE } from "./constants";
+import { CHESS_PIECIES_MAP } from "./chessPieciesMap";
 
 type HoldedFigureProps = {
     holdedFigure?: Figure;
@@ -25,7 +26,6 @@ export const HoldedFigure: FC<HoldedFigureProps> = (props) => {
             className={cn([
                 styles.figure,
                 styles.holdedFigure, 
-                getFigureCSS(holdedFigure),
             ])}
             style={{ 
                 position: 'fixed',
@@ -33,6 +33,6 @@ export const HoldedFigure: FC<HoldedFigureProps> = (props) => {
                 top: `${grabbingPos[1] - DEFAULT_CELL_SIZE / 2}px`,
                 left: `${grabbingPos[0] - DEFAULT_CELL_SIZE / 2}px`  
             }}
-        />
+        > {CHESS_PIECIES_MAP[getFigureCSS(holdedFigure)]('80%')}</div>
     );
 } 

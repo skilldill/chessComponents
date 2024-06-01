@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { checkIsCastlingMove, getFigureCSS, mapCellsToFiguresArray } from "./utils";
 import { DEFAULT_CELL_SIZE } from "./constants";
 import { ChangeMove } from "./models";
+import { CHESS_PIECIES_MAP } from "./chessPieciesMap";
 
 type ChessBoardFiguresLayoutProps = {
     initialState: Cell[][];
@@ -138,7 +139,7 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
             {actualState.map((figure, i) => 
                 <div 
                     key={i}
-                    className={cn([styles.figure, getFigureCSS(figure)], {
+                    className={cn([styles.figure], {
                         [styles.hiddenFigure]: figure.position![0] === -1 || figure.position![0] === 8 
                     })}
                     style={{ 
@@ -146,7 +147,9 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
                         left: `${DEFAULT_CELL_SIZE * figure.position![0]}px`,
                         transition: !!change && change.withTransition ? 'all .15s ease-out' : 'none' 
                     }}
-                />
+                >
+                    {CHESS_PIECIES_MAP[getFigureCSS(figure)]('80%')}
+                </div>
             )}
         </div>
     )
