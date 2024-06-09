@@ -29,12 +29,6 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         config,
     } = props;
 
-    const [boardConfig, setBoardConfig] = useState(DEFAULT_CHESSBORD_CONFIG);
-
-    useEffect(() => {
-        setBoardConfig(getChessBoardConfig(config));
-    }, [config]);
-
     const {
         initialState,
         fromPos,
@@ -45,6 +39,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         markedCells,
         arrowsCoords,
         startArrowCoord,
+        boardConfig,
 
         setActualState,
         selectClickFrom,
@@ -60,7 +55,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         markCell,
         getHasCheckByCellPos,
         endRenderArrow,
-    } = useChessBoardInteractive({ onChange });
+    } = useChessBoardInteractive({ onChange, config });
 
     useEffect(() => {
         const { boardState, currentColor } = FENtoGameState(FEN);
@@ -99,6 +94,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 arrowsCoords={arrowsCoords}
                 startArrowCoord={startArrowCoord}
                 grabbingPos={grabbingPos}
+                boardConfig={boardConfig}
             />
             <ChessBoardControlLayout
                 boardConfig={boardConfig}
