@@ -1,5 +1,9 @@
 import { CellPos, MoveData } from "core/JSChessEngine"
 
+export type ChessBoardConfig = {
+    cellSize: number;
+}
+
 export type ChangeMove = {
     move: MoveData;
     withTransition?: boolean;

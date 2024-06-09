@@ -13,6 +13,7 @@ function App() {
         onChange={(data) => { console.log(data) }}
         color="white"
         reversed={reversed}
+        config={{ cellSize: 92 }}
       />
       <button
         onClick={() => setReversed((prev) => !prev)}

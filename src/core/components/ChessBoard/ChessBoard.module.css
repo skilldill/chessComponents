@@ -37,19 +37,16 @@
 }
 
 .selectedCell {
-    background-color: var(--color-cyan-200) !important;
-    border: 3px solid var(--color-cyan-500);
+    background-color: #e3f1fe !important;
+    border: 3px solid #6ac2fd;
     box-sizing: border-box;
 }
 
 .controlCell {
-    width: 92px;
-    height: 92px;
+
 }
 
 .interactiveCell {
-    width: 92px;
-    height: 92px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,7 +56,7 @@
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    background-color: var(--color-cyan-700);
+    background-color: #3697ce;
     opacity: 0.8;
 }
 
@@ -68,19 +65,15 @@
 }
 
 .cell {
-    width: 92px;
-    height: 92px;
-    background-color: var(--color-grey-200);
+    background-color: #d8d9e6;
 }
 
 .cellLight {
-    background-color: var(--color-grey-10);
+    background-color: #fafafc;
 }
 
 .figure {
     position: absolute;
-    width: 92px;
-    height: 92px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,7 +105,7 @@
 .arrow {
     position: absolute;
     width: 20px;
-    background-color: var(--color-cyan-500);
+    background-color: #6ac2fd;
     height: 100px;
     opacity: 0.5;
     z-index: 1;
@@ -126,6 +119,6 @@
     height: 0;
     border-top: 30px solid transparent;
     border-bottom: 30px solid transparent;
-    border-left: 30px solid var(--color-cyan-500);
+    border-left: 30px solid #6ac2fd;
     transform: rotate(90deg);
 }
