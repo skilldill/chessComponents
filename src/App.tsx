@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ChessBoard } from './core/components'
-import { MoveData } from 'core/JSChessEngine';
 import { ChessBoardConfig } from 'core/components/ChessBoard/models';
 import { CHESS_PIECES_MAP } from './core/components/ChessBoard/chessPieciesMap';
 
@@ -29,11 +28,13 @@ function App() {
   return (
     <>
       <ChessBoard 
-        FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        // FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
+        FEN="q6k/8/8/8/8/8/8/3NKR2 b - - 0 1"
+        // FEN="2K5/q7/8/8/8/8/8/7r b - - 0 1"
         onChange={(data) => { console.log(data) }}
-        color="white"
+        onEndGame={(data) => { console.log(data) }}
         reversed={reversed}
-        config={CONFIG}
+        // config={CONFIG}
       />
       <button
         onClick={() => setReversed((prev) => !prev)}

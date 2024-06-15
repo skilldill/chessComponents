@@ -1834,7 +1834,7 @@ export class JSChessEngine {
             // Превратить ее в выбранную фигуру
             // ферзь, ладья, слон, конь
             if (targetPos[1] === 0 || targetPos[1] === state.length - 1) {
-                console.log('TRNASFORM');
+                // console.log('TRNASFORM');
             }
         }
 
@@ -2185,7 +2185,10 @@ export class JSChessEngine {
 
         // Мат
         if (linesWithCheck.length > 0 && countsSumResult === 0)
-            return { resultType: 'mat', winColor: activeColor };
+            return { 
+                resultType: 'mat', 
+                winColor: activeColor === 'white' ? 'black' : 'white', 
+            };
 
         // Пат
         if (linesWithCheck.length === 0 && countsSumResult === 0)
