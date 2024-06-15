@@ -1,5 +1,5 @@
 import { FENtoGameState, FigureColor, MoveData } from "../../../core/JSChessEngine";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import styles from './ChessBoard.module.css';
 import { ChessBoardCellsLayout } from "./ChessBoardCellsLayout";
 import { ChessBoardFiguresLayout } from "./ChessBoardFiguresLayout";
@@ -8,8 +8,6 @@ import { useChessBoardInteractive } from "./useChessBoardInteractive";
 import { ChessBoardInteractiveLayout } from "./ChessBoardInteractiveLayout";
 import { ChangeMove, ChessBoardConfig } from "./models";
 import { ArrowLayout } from "./ArrowLayout";
-import { getChessBoardConfig } from "./utils";
-import { DEFAULT_CHESSBORD_CONFIG } from "./constants";
 
 type ChessBoardProps = {
     FEN: string;

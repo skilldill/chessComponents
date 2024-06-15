@@ -37,4 +37,4 @@ export const HoldedFigure: FC<HoldedFigureProps> = (props) => {
             }}
         > {boardConfig.piecesMap[getFigureCSS(holdedFigure)]('80%')}</div>
     );
-} 
+}
