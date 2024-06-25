@@ -138,8 +138,8 @@ export const getChessBoardConfig = (config: Partial<ChessBoardConfig> | undefine
     const buildedConfig: Record<string, string | number | ChessPiecesMap> = {};
 
     configKeyes.forEach((key) => {
-        buildedConfig[key as keyof ChessBoardConfig] = 
-            config[key as keyof ChessBoardConfig] 
+        buildedConfig[key as keyof ChessBoardConfig] =
+            config[key as keyof ChessBoardConfig]
             || DEFAULT_CHESSBORD_CONFIG[key as keyof ChessBoardConfig]
     });
 
@@ -154,32 +154,49 @@ export const getChessBoardConfig = (config: Partial<ChessBoardConfig> | undefine
 export const getFiguresByColor = (
     color: FigureColor,
     forPawnTransform = false
-  ): Figure[] => {
+): Figure[] => {
     if (forPawnTransform) {
-      const figureNamesForPawn: FigureType[] = [
-        'queen',
-        'rook',
-        'bishop',
+        const figureNamesForPawn: FigureType[] = [
+            'queen',
+            'rook',
+            'bishop',
+            'knigts',
+        ];
+        return figureNamesForPawn.map((figureName) => ({
+            type: figureName,
+            color,
+            touched: true,
+        }));
+    }
+
+    const figureNames: FigureType[] = [
+        'pawn',
         'knigts',
-      ];
-      return figureNamesForPawn.map((figureName) => ({
+        'bishop',
+        'rook',
+        'queen',
+        'king',
+    ];
+    return figureNames.map((figureName) => ({
         type: figureName,
         color,
         touched: true,
-      }));
-    }
-  
-    const figureNames: FigureType[] = [
-      'pawn',
-      'knigts',
-      'bishop',
-      'rook',
-      'queen',
-      'king',
-    ];
-    return figureNames.map((figureName) => ({
-      type: figureName,
-      color,
-      touched: true,
     }));
-  };
+};
+
+/**
+* Корректирует позицию захвата курсором
+* коррекция происходит по сроллу
+*/
+export const correctGrabbingPosByScroll = (pos: CellPos) => [
+    pos[0] - window.scrollX,
+    pos[1] - window.scrollY,
+] as CellPos;
+
+/**
+ * Корректирует указатели стрелки
+ */
+export const correctGrabbingPosForArrow = (pos: CellPos, boardConfig: ChessBoardConfig) => [
+    (pos[0] * boardConfig.cellSize) + (boardConfig.cellSize / 2 - 10), 
+    (pos[1] * boardConfig.cellSize) + (boardConfig.cellSize / 2)
+] as CellPos;

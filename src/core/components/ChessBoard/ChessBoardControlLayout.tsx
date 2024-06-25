@@ -18,6 +18,7 @@ type ChessBoardControlLayoutProps = {
     onGrabEndRight: (position: CellPos) => void;
     onGrabbing: (x: number, y: number) => void;
     onRightClick: (position: CellPos) => void;
+    onGrabbingCell: (position: CellPos) => void;
 }
 
 export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props) => {
@@ -29,6 +30,7 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
         onGrabbing,
         onGrabStart,
         onRightClick,
+        onGrabbingCell,
         onGrabEndRight,
         onGrabStartRight,
     } = props;
@@ -64,13 +66,17 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
     const handleGrabing = (event: MouseEvent) => {
         if (pressed) {
             const { pageX, pageY} = event;
-            onGrabbing(pageX, pageY - window.scrollY);
+            onGrabbing(pageX, pageY);
         }
     }
 
     const handleContextMenu = (cellPos: CellPos) => (event: MouseEvent) => {
         event.preventDefault();
         onRightClick(cellPos);
+    }
+
+    const handleGrabbingCell = (cellPos: CellPos) => {
+        onGrabbingCell(cellPos);
     }
 
     return (
@@ -92,6 +98,7 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
                             onMouseDown={handleGrabStart([i, j])}
                             onMouseUp={handleGrabEnd([i, j])}
                             onContextMenu={handleContextMenu([i, j])}
+                            onMouseMove={() => handleGrabbingCell([i, j])}
                         ></div>
                     ))}
                 </div>

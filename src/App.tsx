@@ -26,7 +26,7 @@ const CONFIG: Partial<ChessBoardConfig> = {
 function App() {
   const [reversed, setReversed] = useState(false);
   return (
-    <div style={{ height: 3000 }}>
+    <div style={{ height: 3000, display: 'flex', justifyContent: 'center' }}>
       <ChessBoard 
         // FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
         FEN="q6k/8/8/8/8/8/8/3NKR2 w - - 0 1"
@@ -36,9 +36,9 @@ function App() {
         reversed={reversed}
         // config={CONFIG}
       />
-      <button
+      {/* <button
         onClick={() => setReversed((prev) => !prev)}
-      >revese</button>
+      >revese</button> */}
     </div>
   )
 }

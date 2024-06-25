@@ -9,6 +9,7 @@ import { ChessBoardInteractiveLayout } from "./ChessBoardInteractiveLayout";
 import { ChangeMove, ChessBoardConfig } from "./models";
 import { ArrowLayout } from "./ArrowLayout";
 import { FigurePicker } from "./FigurePicker";
+import { correctGrabbingPosByScroll, correctGrabbingPosForArrow } from "./utils";
 
 type ChessBoardProps = {
     FEN: string;
@@ -42,6 +43,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         boardConfig,
         currentColor,
         showFigurePicker,
+        grabbingCell,
 
         setActualState,
         selectClickFrom,
@@ -57,7 +59,8 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
         markCell,
         getHasCheckByCellPos,
         endRenderArrow,
-        handleSelectFigurePicker
+        handleSelectFigurePicker,
+        handleGrabbingCell,
     } = useChessBoardInteractive({ onChange, onEndGame, config });
 
     useEffect(() => {
@@ -88,7 +91,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 selectedPos={fromPos}
                 possibleMoves={possibleMoves}
                 holdedFigure={holdedFigure}
-                grabbingPos={grabbingPos}
+                grabbingPos={correctGrabbingPosByScroll(grabbingPos)}
                 markedCells={markedCells}
                 boardConfig={boardConfig}
                 onHasCheck={getHasCheckByCellPos}
@@ -96,7 +99,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
             <ArrowLayout 
                 arrowsCoords={arrowsCoords}
                 startArrowCoord={startArrowCoord}
-                grabbingPos={grabbingPos}
+                grabbingPos={correctGrabbingPosForArrow(grabbingCell, boardConfig)}
                 boardConfig={boardConfig}
             />
             <ChessBoardControlLayout
@@ -108,6 +111,7 @@ export const ChessBoard: FC<ChessBoardProps> = (props) => {
                 onGrabEndRight={endRenderArrow}
                 onGrabbing={handleGrabbing}
                 onRightClick={markCell}
+                onGrabbingCell={handleGrabbingCell}
             />
             {showFigurePicker && (
                 <div className={styles.chessBoardFigurePicker}>
