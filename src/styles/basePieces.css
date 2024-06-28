@@ -2,7 +2,7 @@
   background-image: url(../assets/pieces/pawn-white.svg);
 }
 
-.knigts-white {
+.knight-white {
   background-image: url(../assets/pieces/knight-white.svg);
 }
 
@@ -26,7 +26,7 @@
   background-image: url(../assets/pieces/pawn-black.svg);
 }
 
-.knigts-black {
+.knight-black {
   background-image: url(../assets/pieces/knight-black.svg);
 }
 
@@ -51,7 +51,7 @@
   cursor: url(../assets/pieces/pawn-white.svg), auto;
 }
 
-.cursor-knigts-white {
+.cursor-knight-white {
   cursor: url(../assets/pieces/knight-white.svg), auto;
 }
 
@@ -75,7 +75,7 @@
   cursor: url(../assets/pieces/pawn-black.svg), auto;
 }
 
-.cursor-knigts-black {
+.cursor-knight-black {
   cursor: url(../assets/pieces/knight-black.svg), auto;
 }
 
@@ -97,13 +97,13 @@
 
 @media screen and (min-width: 1650px) {
   .pawn-white,
-  .knigts-white,
+  .knight-white,
   .bishop-white,
   .rook-white,
   .queen-white,
   .king-white,
   .pawn-black,
-  .knigts-black,
+  .knight-black,
   .bishop-black,
   .rook-black,
   .queen-black,
