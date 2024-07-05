@@ -29,11 +29,12 @@ function App() {
     <div style={{ height: 3000, display: 'flex', justifyContent: 'center' }}>
       <ChessBoard 
         // FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
-        FEN="q6k/8/8/8/8/8/8/3NKR2 w - - 0 1"
+        FEN="q6k/8/8/8/8/8/8/3NKR2 b - - 0 1"
         // FEN="2K5/q7/8/8/8/8/8/7r b - - 0 1"
         onChange={(data) => { console.log(data) }}
         onEndGame={(data) => { console.log(data) }}
         reversed={reversed}
+        // playerColor="black"
         // config={CONFIG}
       />
       {/* <button
