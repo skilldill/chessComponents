@@ -29,7 +29,8 @@ function App() {
     <div style={{ height: 3000, display: 'flex', justifyContent: 'center' }}>
       <ChessBoard 
         // FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
-        FEN="rnbqkbnr/8/8/8/8/8/8/RNBQKBNR w KQkq - 0 1"
+        FEN="1nbqkbnr/8/8/8/8/8/8/RNBQKBNR w -kq - 0 1"
+        // FEN="k7/8/8/8/8/8/8/24KR w - - 0 1"
         // FEN="q6k/8/8/8/8/8/8/3NKR2 b - - 0 1"
         // FEN="r3kr1r/8/8/8/8/8/8/R3KR1R w KQkq - 0 1"
         // FEN="4kq1q/8/8/8/8/8/8/4KQ1Q w - - 0 1"
